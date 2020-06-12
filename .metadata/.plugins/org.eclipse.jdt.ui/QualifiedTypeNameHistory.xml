@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="accesscontrol.models.Tree.Node"/>
+    <fullyQualifiedTypeName name="accesscontrol.models.Tree"/>
+    <fullyQualifiedTypeName name="accesscontrol.models.User"/>
+    <fullyQualifiedTypeName name="accesscontrol.models.UserType"/>
+    <fullyQualifiedTypeName name="accesscontrol.models.Node"/>
+    <fullyQualifiedTypeName name="accesscontrol.controller.AccessManager"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="java.util.Iterator"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="accesscontrol.service.AccessService"/>
+</qualifiedTypeNameHistroy>

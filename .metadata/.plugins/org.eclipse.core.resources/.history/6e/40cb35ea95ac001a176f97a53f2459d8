@@ -1,0 +1,5 @@
+package accesscontrol.controller;
+
+public class AccessManager {
+
+}

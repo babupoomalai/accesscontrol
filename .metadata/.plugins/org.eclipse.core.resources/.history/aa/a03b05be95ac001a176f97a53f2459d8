@@ -1,0 +1,7 @@
+package accesscontrol.models;
+
+public class Page {
+
+	private String path;
+
+}

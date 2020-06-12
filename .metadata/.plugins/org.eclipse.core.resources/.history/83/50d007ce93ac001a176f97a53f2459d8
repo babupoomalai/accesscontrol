@@ -1,0 +1,5 @@
+package accesscontrol.models;
+
+public enum UserType {
+
+}

@@ -1,0 +1,11 @@
+package accesscontrol.models;
+
+import java.util.Date;
+
+public class AuditHistory {
+	
+	private String url;
+	private String userId;
+	private Date createdOn; 
+
+}

@@ -1,0 +1,19 @@
+package accesscontrol;
+
+import accesscontrol.controller.AccessManager;
+
+public class App {
+	
+	public static void main(String args[]) {
+		AccessManager accessManager = AccessManager.getInstance();
+		
+		accessManager.addUser("User1", "u1");
+		accessManager.restrictPage("u1", "/home/movies");
+		accessManager.restrictPage("u1", "/");
+		accessManager.showRestrictedPages("u1");
+		
+		System.out.println(accessManager.isPageRestricted("u1", "/"));
+		System.out.println(accessManager.isPageRestricted("u1", "/home/movies"));
+	}
+
+}

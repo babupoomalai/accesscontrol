@@ -1,0 +1,12 @@
+package accesscontrol.service;
+
+import accesscontrol.models.User;
+import accesscontrol.models.UserType;
+
+public class UserService {
+
+	public createUser(String id, String name) {
+		return new User(id, UserType.USER, name);
+	}
+
+}

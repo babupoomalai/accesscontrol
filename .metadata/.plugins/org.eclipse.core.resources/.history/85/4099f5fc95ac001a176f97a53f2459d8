@@ -1,0 +1,10 @@
+package accesscontrol.controller;
+
+import java.util.HashMap;
+
+import accesscontrol.models.Tree;
+
+public class AccessManager {
+	private HashMap<String, Tree<String>> pageMap;
+
+}

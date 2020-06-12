@@ -1,0 +1,95 @@
+package accesscontrol.service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import accesscontrol.models.Node;
+
+public class AccessService {
+
+	public void restrictPage(String userId, String page, HashMap<String, Node<String>> hashMap) {
+
+		if (page == null || page.trim().length() == 0) {
+			return;
+		}
+
+		List<String> dirList = getDirectoryList(page);
+
+		Node<String> node;
+
+		if (page.trim().equals("/")) {
+			Node<String> root = addNode(null, "/");
+			hashMap.put("/", root);
+		} else {
+			node = hashMap.get(page);
+			if (node == null) {
+				Node<String> root = addNode(null, page);
+				hashMap.put(dirList.get(0), root);
+				return;
+			}
+
+			for (String directory : dirList) {
+				if (node.getChildren().containsKey(directory)) {
+					node = node.getChildren().get(directory);
+				} else {
+					Node<String> child = addNode(node, page.substring(page.indexOf(directory) + directory.length()));
+					node.getChildren().put(directory, child);
+					return;
+				}
+
+			}
+		}
+	}
+
+	public boolean isPageRestricted(String page, HashMap<String, Node<String>> hashMap) {
+		if (page == null || page.trim().length() == 0) {
+			return false;
+		}
+		
+		List<String> dirList = getDirectoryList(page);
+
+
+	}
+
+	public Node<String> addNode(Node<String> parent, String value) {
+		if (value == null || value.trim().length() == 0) {
+			return null;
+		}
+
+		List<String> dirList = getDirectoryList(value);
+
+		Node<String> parentNode = parent;
+		Node<String> firstNode = null;
+
+		for (String dir : dirList) {
+			Node<String> node = new Node<String>(dir);
+			node.setParent(parentNode);
+			if (parentNode != null) {
+				parentNode.getChildren().put(dir, node);
+			}
+			parentNode = node;
+			if (firstNode == null) {
+				firstNode = node;
+			}
+		}
+
+		return firstNode;
+	}
+
+	private List<String> getDirectoryList(String page) {
+		String[] directories = page.split("/");
+		List<String> dirList = new ArrayList<String>(Arrays.asList(directories));
+		Iterator<String> iterator = dirList.iterator();
+		while (iterator.hasNext()) {
+			String val = iterator.next();
+			if (val == null || val.trim().equals("")) {
+				iterator.remove();
+			}
+		}
+		return dirList;
+	}
+
+}

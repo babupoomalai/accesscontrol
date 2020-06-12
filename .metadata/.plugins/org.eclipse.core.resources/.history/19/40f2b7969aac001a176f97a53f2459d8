@@ -1,0 +1,44 @@
+package accesscontrol.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import accesscontrol.models.Node;
+import accesscontrol.models.User;
+import accesscontrol.models.UserType;
+import accesscontrol.service.AccessService;
+
+public class AccessManager {
+	private Map<String, HashMap<String, Node<String>>> userBlocklistPages;
+	private Map<String, User> userMap;
+	private User admin;
+
+	private AccessManager instance;
+
+	private AccessManager() {
+		this.userBlocklistPages = new HashMap<String, HashMap<String, Node<String>>>();
+		this.userMap = new HashMap<String, User>();
+		this.admin = new User("u0", UserType.ADMIN, "admin");
+	}
+
+	public static AccessManager getInstance() {
+		if (instance == null) {
+			this.instance = new AccessManager();
+		}
+		return instance;
+	}
+
+	public void addUser(String name, String id) {
+		User user = new User(id, UserType.USER, name);
+		userMap.put(id, user);
+	}
+
+	public void restrictPage(String userId, String page) {
+		if (!userBlocklistPages.containsKey(userId)) {
+			HashMap<String, Node<String>> pageMap = new HashMap<String, Node<String>>();
+			userBlocklistPages.put(userId, pageMap);
+		}
+		new AccessService().restrictPage(userId, page, userBlocklistPages.get(userId));
+	}
+
+}

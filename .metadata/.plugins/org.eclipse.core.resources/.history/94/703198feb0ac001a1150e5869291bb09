@@ -1,0 +1,118 @@
+package accesscontrol.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import accesscontrol.models.AuditHistory;
+import accesscontrol.models.Node;
+import accesscontrol.models.User;
+import accesscontrol.models.UserType;
+import accesscontrol.service.AccessService;
+import accesscontrol.service.AuditService;
+
+public class AccessManager {
+	private Map<String, HashMap<String, Node<String>>> userBlocklistPages;
+	private Map<String, User> userMap;
+	private User admin;
+	private Map<String, List<AuditHistory>> auditMap;
+
+	private static AccessManager instance;
+
+	private AccessManager() {
+		this.userBlocklistPages = new HashMap<String, HashMap<String, Node<String>>>();
+		this.userMap = new HashMap<String, User>();
+		this.admin = new User("u0", UserType.ADMIN, "admin");
+		this.auditMap = new HashMap<String, List<AuditHistory>>();
+	}
+
+	public static AccessManager getInstance() {
+		if (instance == null) {
+			instance = new AccessManager();
+		}
+		return instance;
+	}
+
+	public void showRestrictedPages(String userId) {
+		if (!userBlocklistPages.containsKey(userId)) {
+			return;
+		}
+
+		HashMap<String, Node<String>> blocklistedPages = userBlocklistPages.get(userId);
+		for (String page : blocklistedPages.keySet()) {
+			printNode(blocklistedPages.get(page), "");
+		}
+	}
+
+	private void printNode(Node<String> node, String parent) {
+		if (node == null) {
+			System.out.println(parent);
+			return;
+		}
+
+		String printVal = node.getValue().equals("/") ? "" : node.getValue();
+		if (node.getChildren() == null || node.getChildren().size() == 0) {
+			System.out.println(parent + "/" + printVal);
+			return;
+		}
+
+		for (String key : node.getChildren().keySet()) {
+			printNode(node.getChildren().get(key), parent + "/" + printVal);
+		}
+	}
+
+	public void addUser(String name, String id) {
+		User user = new User(id, UserType.USER, name);
+		userMap.put(id, user);
+	}
+
+	public void restrictPage(String userId, String page) {
+		if (!userBlocklistPages.containsKey(userId)) {
+			HashMap<String, Node<String>> pageMap = new HashMap<String, Node<String>>();
+			userBlocklistPages.put(userId, pageMap);
+		}
+		new AccessService().restrictPage(userId, page, userBlocklistPages.get(userId));
+//		System.out.println("ip: " + userBlocklistPages.get(userId));
+	}
+
+	public boolean isPageRestricted(String userId, String page) {
+		if (!userBlocklistPages.containsKey(userId)) {
+			return false;
+		}
+
+		HashMap<String, Node<String>> blocklistedPages = userBlocklistPages.get(userId);
+		boolean isRestricted = new AccessService().isPageRestricted(page, blocklistedPages);
+		// Log visit
+		AuditHistory auditHistory = new AuditService().auditRequest(page, userId, isRestricted);
+		if (!auditMap.containsKey(userId)) {
+			auditMap.put(userId, new ArrayList<AuditHistory>());
+		}
+		auditMap.get(userId).add(auditHistory);
+
+		return isRestricted;
+	}
+
+	public String getAudits(String userId, Date fromDate, Date toDate) {
+		if (!auditMap.containsKey(userId)) {
+			return "No record found";
+		}
+
+		List<AuditHistory> auditList = auditMap.get(userId);
+		List<AuditHistory> list = auditList.stream()
+				.filter(audit -> audit.getCreatedOn().after(fromDate) && audit.getCreatedOn().before(toDate))
+				.collect(Collectors.toList());
+		if (list.size() == 0) {
+			return "No record found";
+		}
+
+		StringBuilder builder = new StringBuilder();
+		for (AuditHistory audit : list) {
+			builder.append("Page: " + audit.getUrl() + ", Is Granted: " + audit.isGranted() + +", Requested on: "
+					+ audit.getCreatedOn() + "\n");
+		}
+	}
+
+}

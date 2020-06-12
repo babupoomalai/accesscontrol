@@ -1,0 +1,9 @@
+package accesscontrol.models;
+
+import java.util.HashMap;
+
+public class Page {
+
+	private HashMap<String, Tree<String>> pageMap;
+
+}

@@ -1,0 +1,24 @@
+package accesscontrol.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import accesscontrol.models.Tree;
+
+public class AccessManager {
+	private Map<String, HashMap<String, Tree<String>>> userBlocklistPages;
+
+	private AccessManager instance;
+
+	private AccessManager() {
+		this.userBlocklistPages = new HashMap<String, HashMap<String, Tree<String>>>();
+	}
+
+	public AccessManager getInstance() {
+		if (instance == null) {
+			this.instance = new AccessManager();
+		}
+		return instance;
+	}
+
+}

@@ -1,0 +1,29 @@
+package accesscontrol.models;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Node<T> {
+
+	private T value;
+	private Node<T> parents;
+	private Map<T, Node<T>> children;
+
+	public Node(T data) {
+		this.value = data;
+		this.children = new HashMap<T, Node<T>>();
+	}
+
+	public T getValue() {
+		return this.value;
+	}
+
+	public Node<T> getParents() {
+		return this.parents;
+	}
+
+	public Map<T, Node<T>> getChildren() {
+		return this.children;
+	}
+
+}

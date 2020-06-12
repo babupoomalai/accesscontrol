@@ -1,0 +1,43 @@
+package accesscontrol.models;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Node<T> {
+
+	private T value;
+	private Node<T> parent;
+	private Map<T, Node<T>> children;
+
+	public Node(T data) {
+		this.value = data;
+		this.children = new HashMap<T, Node<T>>();
+	}
+
+	public T getValue() {
+		return this.value;
+	}
+
+	public Node<T> getParent() {
+		return this.parent;
+	}
+
+	public void setParent(Node<T> parent) {
+		this.parent = parent;
+	}
+
+	public Map<T, Node<T>> getChildren() {
+		return this.children;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder("Node [value=" + value + ", parent=" + parent != null ? parent.getValue(): + ", children=");
+		for (T key : this.getChildren().keySet()) {
+			builder.append("[" + key + ": " + getChildren().get(key).getValue() + "]\n");
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
+}

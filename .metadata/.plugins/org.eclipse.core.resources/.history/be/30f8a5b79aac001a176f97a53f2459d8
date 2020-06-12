@@ -1,0 +1,11 @@
+package accesscontrol;
+
+import accesscontrol.controller.AccessManager;
+
+public class App {
+	
+	public static void main(String args[]) {
+		AccessManager accessManager = AccessManager.getInstance();
+	}
+
+}

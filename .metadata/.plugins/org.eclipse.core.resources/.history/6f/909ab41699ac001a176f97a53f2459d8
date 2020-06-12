@@ -1,0 +1,35 @@
+package accesscontrol.models;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Tree<T> {
+
+	private T value;
+	private Node<T> parents;
+	private Map<T, Node<T>> children;
+
+	public Tree(T data) {
+		root.value = data;
+		root.children = new HashMap<T, Tree<T>.Node<T>>();
+	}
+
+	public T getValue() {
+		return root.value;
+	}
+
+	public Node<T> getParents() {
+		return root.parents;
+	}
+
+	public Map<T, Tree<T>.Node<T>> getChildren() {
+		return root.children;
+	}
+
+	public class Node<T> {
+		
+	}
+
+}
