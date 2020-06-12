@@ -1,0 +1,5 @@
+Access control program.
+1. Configure User and directories that should be blacklisted for access
+2. Check if the page is restricted. If a root is blacklisted, no paths should be given access. if a directory is restricted
+all child folders underneath are blocked by default
+3. Audit the request and give option to filter by date. It should show the directory requested, whether its granted along with date
